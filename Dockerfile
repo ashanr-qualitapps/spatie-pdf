@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Install system dependencies
+# Install system dependencies including those required for Spatie PDF/Browsershot
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -12,7 +12,31 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     nodejs \
     npm \
-    chromium
+    chromium \
+    # Additional dependencies for Spatie PDF/Browsershot
+    libnss3 \
+    libxss1 \
+    libatk-bridge2.0-0 \
+    libdrm2 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libgbm1 \
+    libxkbcommon0 \
+    libasound2 \
+    libatspi2.0-0 \
+    libgtk-3-0 \
+    ca-certificates \
+    fonts-liberation \
+    libappindicator3-1 \
+    libnss3 \
+    lsb-release \
+    xdg-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set environment variables for Puppeteer/Browsershot
+ENV PUPPETEER_EXECUTABLE_PATH="/usr/bin/chromium"
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
@@ -26,8 +50,16 @@ COPY . /var/www/html
 # Install Composer
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
+# Install PHP dependencies (including Spatie PDF)
+RUN composer install --no-dev --optimize-autoloader
+
 # Install Node dependencies
 RUN npm install
+
+# Create a non-root user for running Chromium
+RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
+    && mkdir -p /home/pptruser/Downloads \
+    && chown -R pptruser:pptruser /home/pptruser
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html

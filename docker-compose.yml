@@ -11,11 +11,42 @@ services:
       - "8000:8000"
     volumes:
       - .:/var/www/html
+      - pdf_storage:/var/www/html/storage/app/pdfs
     environment:
       - APP_ENV=local
-      - APP_KEY=
-      - DB_HOST=127.0.0.1
+      - APP_KEY=${APP_KEY}
+      - APP_DEBUG=true
+      - DB_HOST=mysql
       - DB_PORT=3306
       - DB_DATABASE=laravel
       - DB_USERNAME=ashan
       - DB_PASSWORD=
+      # PDF Generation Environment Variables
+      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+      - NODE_PATH=/usr/bin/node
+      - NPM_PATH=/usr/bin/npm
+    depends_on:
+      - mysql
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_ADMIN
+
+  mysql:
+    image: mysql:8.0
+    container_name: spatie-pdf-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=laravel
+      - MYSQL_USER=ashan
+      - MYSQL_PASSWORD=
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+volumes:
+  mysql_data:
+  pdf_storage:
