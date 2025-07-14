@@ -21,3 +21,4 @@ Route::get('/', function () {
 Route::resource('invoices', InvoiceController::class);
 Route::get('invoices/{invoice}/download-pdf', [InvoiceController::class, 'downloadPdf'])->name('invoices.download-pdf');
 Route::get('invoices/{invoice}/view-pdf', [InvoiceController::class, 'viewPdf'])->name('invoices.view-pdf');
+Route::get('/invoices/download-all-pdf', [InvoiceController::class, 'downloadAllPdf'])->name('invoices.download-all-pdf');

@@ -6,56 +6,98 @@ return [
     | Chrome/Chromium Path
     |--------------------------------------------------------------------------
     |
-    | This is the absolute path to the Chrome or Chromium executable.
-    | If not set, Browsershot will try to detect the location automatically.
-    | You can also use `npm install puppeteer` to use the installed version.
+    | Path to Chrome/Chromium executable. If empty, Browsershot will try
+    | to find it automatically using the following paths:
+    |
+    | Windows: C:\Program Files\Google\Chrome\Application\chrome.exe
+    | macOS: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+    | Linux: /usr/bin/google-chrome
     |
     */
-    'chrome_path' => env('CHROME_PATH'),
+    'chrome_path' => env('CHROME_PATH', ''),
 
     /*
     |--------------------------------------------------------------------------
-    | Paper Configuration
+    | Node Binary Path
     |--------------------------------------------------------------------------
     |
-    | This option allows you to configure the default paper size and orientation.
+    | The path to the Node.js binary. If empty, Browsershot will try to use
+    | the Node.js binary that is in your system's PATH.
     |
     */
-    'paper' => 'a4',
-    'orientation' => 'portrait',
+    'node_binary_path' => env('NODE_BINARY_PATH', ''),
 
     /*
     |--------------------------------------------------------------------------
-    | Storage Configuration
+    | NPM Binary Path
     |--------------------------------------------------------------------------
     |
-    | Here you can specify the temporary storage disk and path.
+    | The path to the NPM binary. If empty, Browsershot will try to use
+    | the NPM binary that is in your system's PATH.
     |
     */
-    'storage_disk' => env('PDF_STORAGE_DISK', 'local'),
-    'storage_path' => env('PDF_STORAGE_PATH', 'pdf'),
-    
+    'npm_binary_path' => env('NPM_BINARY_PATH', ''),
+
     /*
     |--------------------------------------------------------------------------
-    | Chrome/Puppeteer Options
+    | Chrome/Chromium Sandbox
     |--------------------------------------------------------------------------
     |
-    | Here you can specify additional options for Chrome/Puppeteer.
+    | Whether to use the Chrome/Chromium sandbox. Useful on certain Linux
+    | distributions where sandbox is not working.
     |
     */
-    'chrome_args' => [
-        '--disable-gpu',
-        '--disable-setuid-sandbox',
-        '--no-sandbox',
-    ],
-    
+    'no_sandbox' => env('CHROME_NO_SANDBOX', true),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Paper Size
+    |--------------------------------------------------------------------------
+    |
+    | The default paper size to use for PDFs. You can use any of the
+    | standard paper sizes: a0-a10, b0-b10, c0-c10, letter, legal,
+    | junior-legal, ledger, tabloid, executive, folio, etc.
+    |
+    */
+    'default_paper_size' => 'a4',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Paper Orientation
+    |--------------------------------------------------------------------------
+    |
+    | The default paper orientation to use for PDFs.
+    | Available options: 'portrait', 'landscape'
+    |
+    */
+    'default_paper_orientation' => 'portrait',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Font Family
+    |--------------------------------------------------------------------------
+    |
+    | The default font family to use for PDFs.
+    |
+    */
+    'default_font_family' => 'sans-serif',
+
     /*
     |--------------------------------------------------------------------------
     | Browsershot Options
     |--------------------------------------------------------------------------
     |
-    | Additional options for Browsershot.
+    | Default Browsershot options that will be applied to all PDFs.
     |
     */
-    'timeout' => 60,
+    'browsershot_options' => [
+        'ignoreHttpsErrors' => true,
+        'timeout' => 30,
+        'margins' => [
+            'top' => 20,
+            'right' => 20,
+            'bottom' => 20,
+            'left' => 20,
+        ],
+    ],
 ];

@@ -127,4 +127,35 @@ class InvoiceController extends Controller
             ->format('a4')
             ->stream('invoice-' . $invoice->id . '.pdf');
     }
+
+
+    
+    /**
+     * Generate and download all invoices as PDF report
+     */
+    public function downloadAllPdf(Request $request)
+    {
+        $query = Invoice::query();
+        
+        // Apply any filters if needed
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+        
+        if ($request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        
+        if ($request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+        
+        $invoices = $query->get();
+        
+        return Pdf::view('invoices.all-pdf', compact('invoices'))
+            ->format('a4')
+            ->orientation('landscape')
+            ->name('invoices-report-' . date('Y-m-d') . '.pdf')
+            ->download();
+    }
 }
