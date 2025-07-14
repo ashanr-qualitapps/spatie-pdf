@@ -108,6 +108,38 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
    php artisan serve
    ```
 
+---
+
+## Running with Docker
+
+1. **Build and start containers**
+   ```bash
+   docker-compose up --build
+   ```
+
+2. **Install dependencies inside the container**
+   ```bash
+   docker-compose exec app composer install
+   docker-compose exec app npm install
+   ```
+
+3. **Set up environment and generate key**
+   ```bash
+   docker-compose exec app cp .env.example .env
+   docker-compose exec app php artisan key:generate
+   ```
+
+4. **Run migrations**
+   ```bash
+   docker-compose exec app php artisan migrate
+   ```
+
+5. **Access the application**
+
+   Visit [http://localhost:8000](http://localhost:8000) in your browser.
+
+---
+
 ## PDF Generation
 
 This project uses [Spatie Laravel PDF](https://spatie.be/docs/laravel-pdf) for generating PDFs. See [PUPPETEER_SETUP.md](./PUPPETEER_SETUP.md) for browser and Puppeteer setup instructions.

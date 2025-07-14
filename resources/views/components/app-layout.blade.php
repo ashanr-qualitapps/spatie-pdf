@@ -12,11 +12,24 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
-        @include('layouts.navigation')
+        <nav class="bg-white border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <!-- Logo -->
+                        <div class="shrink-0 flex items-center">
+                            <a href="{{ route('invoices.index') }}">
+                                {{ config('app.name', 'Laravel') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
 
         <!-- Page Heading -->
         @if (isset($header))
@@ -32,8 +45,8 @@
             {{ $slot }}
         </main>
     </div>
-    
-    <!-- Scripts -->
+
+    <!-- Scripts stack for components to push scripts -->
     @stack('scripts')
 </body>
 </html>

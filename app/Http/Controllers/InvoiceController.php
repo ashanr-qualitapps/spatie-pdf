@@ -13,7 +13,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::all();
+        $invoices = Invoice::latest()->paginate(10);
         return view('invoices.index', compact('invoices'));
     }
 
@@ -31,11 +31,19 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'content_html' => 'nullable',
-            // Add other validation rules as needed
+            'title' => 'required|string|max:255',
+            'content' => 'required',
+            'client_name' => 'required|string|max:255',
+            'client_email' => 'nullable|email|max:255',
+            'invoice_number' => 'required|string|unique:invoices,invoice_number',
+            'issue_date' => 'required|date',
+            'due_date' => 'required|date|after_or_equal:issue_date',
+            'total_amount' => 'required|numeric|min:0',
+            'status' => 'required|string|in:draft,sent,paid,overdue',
         ]);
-
+        
         Invoice::create($validated);
+        
         return redirect()->route('invoices.index')->with('success', 'Invoice created successfully');
     }
 
@@ -61,11 +69,19 @@ class InvoiceController extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         $validated = $request->validate([
-            'content_html' => 'nullable',
-            // Add other validation rules as needed
+            'title' => 'required|string|max:255',
+            'content' => 'required',
+            'client_name' => 'required|string|max:255',
+            'client_email' => 'nullable|email|max:255',
+            'invoice_number' => 'required|string|unique:invoices,invoice_number,' . $invoice->id,
+            'issue_date' => 'required|date',
+            'due_date' => 'required|date|after_or_equal:issue_date',
+            'total_amount' => 'required|numeric|min:0',
+            'status' => 'required|string|in:draft,sent,paid,overdue',
         ]);
-
+        
         $invoice->update($validated);
+        
         return redirect()->route('invoices.index')->with('success', 'Invoice updated successfully');
     }
 
