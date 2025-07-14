@@ -64,3 +64,50 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Getting Started
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/spatie-pdf.git
+   cd spatie-pdf
+   ```
+
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
+
+3. **Copy and configure your environment file**
+   ```bash
+   cp .env.example .env
+   # Edit .env as needed
+   ```
+
+4. **Generate application key**
+   ```bash
+   php artisan key:generate
+   ```
+
+5. **Install Node.js dependencies (for Puppeteer)**
+   ```bash
+   npm install
+   ```
+
+6. **Set up Puppeteer for PDF generation**
+
+   See [PUPPETEER_SETUP.md](./PUPPETEER_SETUP.md) for details.
+
+7. **Run database migrations**
+   ```bash
+   php artisan migrate
+   ```
+
+8. **Start the development server**
+   ```bash
+   php artisan serve
+   ```
+
+## PDF Generation
+
+This project uses [Spatie Laravel PDF](https://spatie.be/docs/laravel-pdf) for generating PDFs. See [PUPPETEER_SETUP.md](./PUPPETEER_SETUP.md) for browser and Puppeteer setup instructions.
