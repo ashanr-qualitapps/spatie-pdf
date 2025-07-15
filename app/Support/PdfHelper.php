@@ -62,19 +62,23 @@ class PdfHelper
         $filename = $filename ?? 'document.pdf';
         
         $chromePath = self::getChromePath();
+        $nodePath = env('NODE_PATH', '/usr/local/lib/node_modules:/node_modules');
         
         Log::info('PDF generation using Chrome at: ' . $chromePath);
+        Log::info('Using NODE_PATH: ' . $nodePath);
 
-        return $pdf->withBrowsershot(function ($browsershot) use ($chromePath) {
+        return $pdf->withBrowsershot(function ($browsershot) use ($chromePath, $nodePath) {
             $browsershot->noSandbox()
                 ->setNodeBinary(env('NODE_BINARY_PATH', '/usr/bin/node'))
                 ->setChromePath($chromePath)
+                ->setNodeModulePath($nodePath)
                 ->addChromiumArguments([
                     'no-sandbox',
                     'disable-setuid-sandbox',
                     'disable-dev-shm-usage'
                 ])
-                ->setDebuggingPort(9222);
+                ->setEnvironmentVariable('PUPPETEER_EXECUTABLE_PATH', $chromePath)
+                ->setEnvironmentVariable('NODE_PATH', $nodePath);
         })->format(config('pdf.default_paper_size'))
           ->name($filename);
     }
