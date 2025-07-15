@@ -14,7 +14,7 @@ return [
     | Linux: /usr/bin/google-chrome
     |
     */
-    'chrome_path' => env('CHROME_PATH', ''),
+    'chrome_path' => env('PUPPETEER_EXECUTABLE_PATH', '/usr/bin/chromium'),
 
     /*
     |--------------------------------------------------------------------------
@@ -25,7 +25,7 @@ return [
     | the Node.js binary that is in your system's PATH.
     |
     */
-    'node_binary_path' => env('NODE_BINARY_PATH', ''),
+    'node_binary_path' => env('NODE_BINARY_PATH', '/usr/bin/node'),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,7 +36,7 @@ return [
     | the NPM binary that is in your system's PATH.
     |
     */
-    'npm_binary_path' => env('NPM_BINARY_PATH', ''),
+    'npm_binary_path' => env('NPM_BINARY_PATH', '/usr/bin/npm'),
 
     /*
     |--------------------------------------------------------------------------

@@ -51,8 +51,15 @@ COPY . /var/www/html
 # Install Composer
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
-# Install Puppeteer globally (without downloading Chromium)
-RUN npm install -g puppeteer@21
+# Install Puppeteer globally AND make sure the path is correctly set
+RUN npm install -g puppeteer@21 && \
+    npm list -g puppeteer && \
+    echo "NODE_PATH=$NODE_PATH" && \
+    mkdir -p /node_modules && \
+    ln -s /usr/local/lib/node_modules/puppeteer /node_modules/puppeteer
+
+# Install puppeteer locally in the project as well for redundancy
+RUN npm install puppeteer@21 --save-dev
 
 # Install PHP dependencies (including Spatie PDF)
 RUN composer install --no-dev --optimize-autoloader
@@ -63,7 +70,7 @@ RUN npm install
 # Create a non-root user for running Chromium
 RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
     && mkdir -p /home/pptruser/Downloads \
-    && chown -R pptruser:pptruser /home/pptruser
+    && chown -R pptruser:ppptruser /home/pptruser
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
