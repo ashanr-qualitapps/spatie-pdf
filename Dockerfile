@@ -37,6 +37,7 @@ RUN apt-get update && apt-get install -y \
 # Set environment variables for Puppeteer/Browsershot
 ENV PUPPETEER_EXECUTABLE_PATH="/usr/bin/chromium"
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV NODE_PATH=/usr/local/lib/node_modules
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
@@ -49,6 +50,9 @@ COPY . /var/www/html
 
 # Install Composer
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+
+# Install Puppeteer globally (without downloading Chromium)
+RUN npm install -g puppeteer@21
 
 # Install PHP dependencies (including Spatie PDF)
 RUN composer install --no-dev --optimize-autoloader

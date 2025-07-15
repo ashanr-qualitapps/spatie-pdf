@@ -205,14 +205,25 @@ docker-compose exec app which chromium
 docker-compose exec app chromium --version
 ```
 
-#### 2. Permission Errors
+#### 2. Puppeteer Not Found
+If you encounter the error "Cannot find module 'puppeteer'", ensure puppeteer is installed:
+```bash
+# Install puppeteer globally in the container
+docker-compose exec app npm install -g puppeteer@21
+
+# Verify NODE_PATH is correct
+docker-compose exec app bash -c 'echo $NODE_PATH'
+# Should output: /usr/local/lib/node_modules
+```
+
+#### 3. Permission Errors
 ```bash
 # Fix storage permissions
 docker-compose exec app chown -R www-data:www-data storage/
 docker-compose exec app chmod -R 775 storage/
 ```
 
-#### 3. Database Connection Issues
+#### 4. Database Connection Issues
 ```bash
 # Check MySQL service status
 docker-compose ps mysql
@@ -221,7 +232,7 @@ docker-compose ps mysql
 docker-compose logs mysql
 ```
 
-#### 4. PDF Generation Timeouts
+#### 5. PDF Generation Timeouts
 If experiencing timeout issues in production:
 
 ```php
@@ -263,6 +274,54 @@ it('can generate invoice PDF', function () {
         return $pdf->contains('Invoice');
     });
 });
+```
+
+## Restarting After Changes
+
+When you make changes to your application code or Docker configuration, you may need to restart your containers:
+
+### For Code Changes Only
+
+If you've only changed application code (PHP files, Blade templates, etc.):
+
+```bash
+# Restart the app container
+docker-compose restart app
+```
+
+### For Dependency Changes
+
+If you've updated Composer or NPM dependencies:
+
+```bash
+# Restart and rebuild the application
+docker-compose down
+docker-compose up -d
+docker-compose exec app composer install
+docker-compose exec app npm install
+docker-compose exec app npm run build
+```
+
+### For Dockerfile or Docker Compose Changes
+
+If you've modified the Dockerfile or docker-compose.yml:
+
+```bash
+# Fully rebuild containers
+docker-compose down
+docker-compose up -d --build
+```
+
+### Verify Services
+
+Check if all services are running correctly:
+
+```bash
+# View all running containers
+docker-compose ps
+
+# Check container logs for errors
+docker-compose logs -f app
 ```
 
 ## Support
