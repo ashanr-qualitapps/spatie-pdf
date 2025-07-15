@@ -197,6 +197,20 @@ docker-compose exec app php artisan tinker
 })->save('test.pdf');
 ```
 
+## Running Tests
+
+To run the PDF generation feature test, use:
+
+```bash
+docker-compose exec app php artisan test --filter=PdfGenerationTest
+```
+
+Or to run all tests:
+
+```bash
+docker-compose exec app php artisan test
+```
+
 ## Troubleshooting
 
 ### Common Issues
