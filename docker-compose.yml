@@ -20,7 +20,7 @@ services:
       - DB_PORT=3306
       - DB_DATABASE=laravel
       - DB_USERNAME=ashan
-      - DB_PASSWORD=
+      - DB_PASSWORD=password
       # PDF Generation Environment Variables
       - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
       - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
@@ -32,21 +32,35 @@ services:
       - seccomp:unconfined
     cap_add:
       - SYS_ADMIN
+    networks:
+      - spatie-pdf-network
 
   mysql:
     image: mysql:8.0
     container_name: spatie-pdf-mysql
     ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=laravel
-      - MYSQL_USER=ashan
-      - MYSQL_PASSWORD=
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=laravel
+      - MYSQL_USER=ashan
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=rootpassword
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 5s
+      start_period: 30s
+    networks:
+      - spatie-pdf-network
     command: --default-authentication-plugin=mysql_native_password
 
+networks:
+  spatie-pdf-network:
+    driver: bridge
+
 volumes:
-  mysql_data:
   pdf_storage:
+  mysql_data:
