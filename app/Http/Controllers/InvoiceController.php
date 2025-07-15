@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Support\PdfHelper;
 use Illuminate\Http\Request;
-use Spatie\LaravelPdf\Facades\Pdf;
 
 class InvoiceController extends Controller
 {
@@ -99,16 +99,9 @@ class InvoiceController extends Controller
      */
     public function downloadPdf(Invoice $invoice)
     {
-        if ($invoice->content_html) {
-            return Pdf::html($invoice->content_html)
-                ->format('a4')
-                ->download('invoice-' . $invoice->id . '.pdf');
-        }
-        
-        // Use the PDF view template
-        return Pdf::view('invoices.pdf', ['invoice' => $invoice])
-            ->format('a4')
-            ->download('invoice-' . $invoice->id . '.pdf');
+        return PdfHelper::fromView('pdfs.invoice', ['invoice' => $invoice])
+            ->name("invoice-{$invoice->invoice_number}.pdf")
+            ->download();
     }
 
     /**
@@ -116,31 +109,38 @@ class InvoiceController extends Controller
      */
     public function viewPdf(Invoice $invoice)
     {
-        if ($invoice->content_html) {
-            return Pdf::html($invoice->content_html)
-                ->format('a4')
-                ->stream('invoice-' . $invoice->id . '.pdf');
-        }
-        
-        // Use the PDF view template
-        return Pdf::view('invoices.pdf', ['invoice' => $invoice])
-            ->format('a4')
-            ->stream('invoice-' . $invoice->id . '.pdf');
+        return PdfHelper::fromView('pdfs.invoice', ['invoice' => $invoice])
+            ->name("invoice-{$invoice->invoice_number}.pdf")
+            ->inline();
     }
 
-
-    
     /**
      * Generate and download all invoices as PDF report
      */
     public function downloadAllPdf(Request $request)
     {
-        $query = Invoice::query();
+        $invoices = Invoice::query();
         
-        // Apply any filters if needed
-        if ($request->status) {
-            $query->where('status', $request->status);
+        // Apply filters if provided
+        if ($request->has('status')) {
+            $invoices->where('status', $request->status);
         }
+        
+        if ($request->has('date_from')) {
+            $invoices->whereDate('issue_date', '>=', $request->date_from);
+        }
+        
+        if ($request->has('date_to')) {
+            $invoices->whereDate('issue_date', '<=', $request->date_to);
+        }
+        
+        $invoices = $invoices->get();
+        
+        return PdfHelper::fromView('pdfs.all-invoices', ['invoices' => $invoices])
+            ->name('all-invoices.pdf')
+            ->download();
+    }
+}
         
         if ($request->date_from) {
             $query->whereDate('created_at', '>=', $request->date_from);

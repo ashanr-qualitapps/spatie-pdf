@@ -74,7 +74,7 @@ RUN npm install
 # Create a non-root user for running Chromium
 RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
     && mkdir -p /home/pptruser/Downloads \
-    && chown -R pptruser:ppptruser /home/pptruser
+    && chown -R pptruser:pptruser /home/pptruser
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html

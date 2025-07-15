@@ -192,7 +192,9 @@ docker-compose exec app php artisan test
 # Test PDF generation
 docker-compose exec app php artisan tinker
 >>> use Spatie\LaravelPdf\Facades\Pdf;
->>> Pdf::html('<h1>Test PDF</h1>')->save('test.pdf');
+>>> Pdf::html('<h1>Test PDF</h1>')->withBrowsershot(function ($browsershot) {
+    $browsershot->noSandbox();
+})->save('test.pdf');
 ```
 
 ## Troubleshooting
@@ -237,7 +239,21 @@ docker-compose ps mysql
 docker-compose logs mysql
 ```
 
-#### 5. PDF Generation Timeouts
+#### 5. Chromium Sandbox Error
+If you encounter an error about "Running as root without --no-sandbox is not supported":
+
+```bash
+# In Docker environments, use the withBrowsershot method for PDF generation:
+Pdf::html('<h1>Test PDF</h1>')->withBrowsershot(function ($browsershot) {
+    $browsershot->noSandbox();
+})->save('test.pdf');
+```
+
+This is necessary because Docker containers typically run as root, and Chromium has security restrictions against running as root without disabling the sandbox. In production environments, consider:
+- Using a non-root user in your Docker container
+- Only using `noSandbox()` in containerized environments where you trust the input
+
+#### 6. PDF Generation Timeouts
 If experiencing timeout issues in production:
 
 ```php
@@ -253,7 +269,12 @@ Pdf::view('pdfs.invoice')
 #### Production Deployment
 For production environments, consider:
 
-- Using `noSandbox()` only if you trust the content
+- Using the correct sandbox configuration method only if you trust the content:
+  ```php
+  Pdf::view('pdfs.invoice')->withBrowsershot(function ($browsershot) {
+      $browsershot->noSandbox();
+  })->save('invoice.pdf');
+  ```
 - Increasing protocol timeout for complex PDFs
 - Ensuring proper Chromium dependencies are installed
 
