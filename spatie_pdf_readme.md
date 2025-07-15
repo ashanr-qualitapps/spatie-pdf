@@ -55,8 +55,9 @@ DB_PASSWORD=password
 # PDF Generation Configuration
 PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-NODE_PATH=/usr/bin/node
+NODE_PATH=/usr/local/lib/node_modules:/node_modules
 NPM_PATH=/usr/bin/npm
+NODE_BINARY_PATH=/usr/bin/node
 ```
 
 ### 3. Generate Application Key

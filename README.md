@@ -55,8 +55,9 @@ DB_PASSWORD=password
 # PDF Generation Configuration
 PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-NODE_PATH=/usr/bin/node
+NODE_PATH=/usr/local/lib/node_modules:/node_modules
 NPM_PATH=/usr/bin/npm
+NODE_BINARY_PATH=/usr/bin/node
 ```
 
 ### 3. Generate Application Key
@@ -206,14 +207,18 @@ docker-compose exec app chromium --version
 ```
 
 #### 2. Puppeteer Not Found
-If you encounter the error "Cannot find module 'puppeteer'", ensure puppeteer is installed:
-```bash
-# Install puppeteer globally in the container
-docker-compose exec app npm install -g puppeteer@21
+If you encounter the error "Cannot find module 'puppeteer'" or see warnings about NODE_PATH, use one of these methods:
 
-# Verify NODE_PATH is correct
+```bash
+# Method 1: Set NODE_PATH in the command
+docker-compose exec -e NODE_PATH=/usr/local/lib/node_modules:/node_modules app npm install
+
+# Method 2: Source the environment file first
+docker-compose exec app bash -c 'source /etc/profile.d/node_path.sh && npm install'
+
+# Verify NODE_PATH is correctly set
 docker-compose exec app bash -c 'echo $NODE_PATH'
-# Should output: /usr/local/lib/node_modules
+# Should output: /usr/local/lib/node_modules:/node_modules
 ```
 
 #### 3. Permission Errors
