@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('{id}/generate-pdf', [PdfController::class, 'generatePdf']);
+Route::get('pdf/download/{filename}', [PdfController::class, 'downloadPdf'])->name('api.pdf.download');
 
 Route::get('/test', function () {
     return response()->json(['message' => 'API is working']);

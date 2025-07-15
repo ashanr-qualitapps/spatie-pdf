@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Illuminate\Support\Facades\Log;
 use App\Support\PdfHelper;
+use App\Support\PuppeteerSetup;
 
 class PdfGenerationTest extends TestCase
 {
@@ -27,6 +28,10 @@ class PdfGenerationTest extends TestCase
         // Assert the path exists
         $this->assertFileExists($chromePath);
         Log::info('Chrome path detected: ' . $chromePath);
+        
+        // Register Chrome with Puppeteer
+        $success = PuppeteerSetup::registerChrome();
+        $this->assertTrue($success);
     }
 
     /**
@@ -34,8 +39,10 @@ class PdfGenerationTest extends TestCase
      */
     public function test_actual_pdf_generation_with_browsershot(): void
     {
-        // Don't use Pdf::fake() here to allow real PDF generation
+        // Register Chrome with Puppeteer first
+        PuppeteerSetup::registerChrome();
         
+        // Don't use Pdf::fake() here to allow real PDF generation
         $html = '<h1>Test PDF</h1><p>Generated with Browsershot</p>';
         $outputPath = storage_path('app/test-output.pdf');
         

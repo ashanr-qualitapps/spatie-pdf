@@ -48,3 +48,20 @@ if (!is_dir($puppeteerDir)) {
     mkdir($puppeteerDir, 0777, true);
     echo "Created puppeteer cache directory: {$puppeteerDir}\n";
 }
+
+// Register Chrome with Puppeteer by creating browsers.json
+$chromePath = getenv('PUPPETEER_EXECUTABLE_PATH');
+$browsersConfig = [
+    'browsers' => [
+        [
+            'name' => 'chrome',
+            'revision' => '121.0.6167.85',
+            'installPath' => dirname($chromePath),
+            'executablePath' => $chromePath
+        ]
+    ]
+];
+
+$configPath = "{$puppeteerDir}/browsers.json";
+file_put_contents($configPath, json_encode($browsersConfig, JSON_PRETTY_PRINT));
+echo "Created Puppeteer browsers.json at: {$configPath}\n";
