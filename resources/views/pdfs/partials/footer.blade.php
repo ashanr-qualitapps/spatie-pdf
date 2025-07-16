@@ -1,44 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        .pdf-footer {
-            padding: 10px;
-            font-family: Arial, sans-serif;
-            font-size: 10px;
-            color: #777;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 30px;
-            background-color: white;
-            border-top: 1px solid #ddd;
-        }
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .page-number {
-            text-align: right;
-        }
-        .company-info {
-            text-align: left;
-        }
-    </style>
-</head>
-<body>
-    <div class="pdf-footer">
-        <div class="footer-content">
-            <div class="company-info">
-                © {{ date('Y') }} Vehicle Information System | Confidential
-            </div>
-            <div class="page-number">
-                Page <span class="pageNumber"></span> of <span class="totalPages"></span>
-            </div>
-        </div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; border-top: 1px solid #ddd; background: #f8f9fa; font-size: 10px; color: #666;">
+    <div>
+        <div style="font-weight: bold; color: #2c5aa0;">QUADIS.es</div>
+        <div>¿Tienes dudas? ¡Llámanos al 900 100 102!</div>
     </div>
-</body>
-</html>
+    <div style="text-align: right;">
+        <div>Generado: {{ date('d/m/Y H:i') }}</div>
+        <div>www.quadis.es</div>
+    </div>
+</div>
