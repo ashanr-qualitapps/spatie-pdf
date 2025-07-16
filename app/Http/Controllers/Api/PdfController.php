@@ -83,10 +83,7 @@ class PdfController extends Controller
                 ->headerView('pdfs.partials.header', $data)
                 ->footerView('pdfs.partials.footer', $data)
                 ->format('A4')
-                ->margins(10, 10, 10, 10)
-                ->withBrowsershot(function ($browsershot) {
-                    $browsershot->showBackground(true);
-                });
+                ->margins(10, 10, 10, 10);
 
             // Save to storage
             $pdf->save($storagePath);

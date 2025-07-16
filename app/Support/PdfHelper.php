@@ -9,10 +9,6 @@ class PdfHelper
 {
     /**
      * Create a PDF from HTML content
-     *
-     * @param string $html The HTML content
-     * @param string|null $outputPath Optional output path to save
-     * @return \Spatie\LaravelPdf\PdfBuilder
      */
     public static function fromHtml($html, $outputPath = null)
     {
@@ -22,28 +18,36 @@ class PdfHelper
         $pdf = Pdf::html($html)
             ->withBrowsershot(function ($browsershot) {
                 $chromePath = self::getChromePath();
+                Log::info("Using Chrome path: {$chromePath}");
+                
                 $browsershot->noSandbox()
                     ->setNodeBinary(getenv('NODE_BINARY_PATH') ?: '/usr/bin/node')
                     ->setChromePath($chromePath)
                     ->setNodeModulePath(self::getNodeModulesPath())
                     ->showBackground(true)
+                    ->addChromiumArguments([
+                        '--disable-gpu',
+                        '--disable-dev-shm-usage',
+                        '--disable-setuid-sandbox',
+                        '--no-first-run',
+                        '--no-zygote',
+                        '--single-process',
+                        '--disable-background-timer-throttling',
+                        '--disable-backgrounding-occluded-windows',
+                        '--disable-renderer-backgrounding'
+                    ])
                     ->timeout(60);
             });
-            
+        
         if ($outputPath) {
             $pdf->name($outputPath);
         }
-            
+        
         return $pdf;
     }
     
     /**
      * Create a PDF from a view
-     *
-     * @param string $view The view name
-     * @param array $data The data to pass to the view
-     * @param string|null $outputPath Optional output path to save
-     * @return \Spatie\LaravelPdf\PdfBuilder
      */
     public static function fromView($view, array $data = [], $outputPath = null)
     {
@@ -53,25 +57,36 @@ class PdfHelper
         $pdf = Pdf::view($view, $data)
             ->withBrowsershot(function ($browsershot) {
                 $chromePath = self::getChromePath();
+                Log::info("Using Chrome path: {$chromePath}");
+                
                 $browsershot->noSandbox()
                     ->setNodeBinary(getenv('NODE_BINARY_PATH') ?: '/usr/bin/node')
                     ->setChromePath($chromePath)
                     ->setNodeModulePath(self::getNodeModulesPath())
                     ->showBackground(true)
+                    ->addChromiumArguments([
+                        '--disable-gpu',
+                        '--disable-dev-shm-usage',
+                        '--disable-setuid-sandbox',
+                        '--no-first-run',
+                        '--no-zygote',
+                        '--single-process',
+                        '--disable-background-timer-throttling',
+                        '--disable-backgrounding-occluded-windows',
+                        '--disable-renderer-backgrounding'
+                    ])
                     ->timeout(60);
             });
-            
+        
         if ($outputPath) {
             $pdf->name($outputPath);
         }
-            
+        
         return $pdf;
     }
     
     /**
      * Get the Chrome executable path
-     *
-     * @return string
      */
     public static function getChromePath()
     {
@@ -79,10 +94,11 @@ class PdfHelper
         
         if (!$chromePath || !file_exists($chromePath)) {
             $possiblePaths = [
+                '/usr/bin/google-chrome',
+                '/usr/bin/google-chrome-stable',
                 '/usr/bin/chromium',
                 '/usr/bin/chromium-browser',
                 '/usr/bin/chrome',
-                '/usr/bin/google-chrome',
                 '/usr/local/bin/chromium',
                 '/usr/local/bin/chrome',
                 '/usr/local/bin/google-chrome'
@@ -96,7 +112,7 @@ class PdfHelper
             }
             
             if (!$chromePath) {
-                $chromePath = '/usr/bin/chromium';
+                $chromePath = '/usr/bin/google-chrome';
             }
             
             Log::info("Using detected Chrome path: {$chromePath}");
@@ -107,8 +123,6 @@ class PdfHelper
     
     /**
      * Get the Node modules path
-     *
-     * @return string
      */
     public static function getNodeModulesPath()
     {
@@ -135,6 +149,6 @@ class PdfHelper
             }
         }
         
-        return '/node_modules'; // Default fallback
+        return '/usr/local/lib/node_modules'; // Default fallback
     }
 }

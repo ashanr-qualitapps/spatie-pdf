@@ -22,9 +22,9 @@ services:
       - DB_USERNAME=ashan
       - DB_PASSWORD=password
       # PDF Generation Environment Variables
-      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
       - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-      - NODE_PATH=/usr/local/lib/node_modules:/node_modules
+      - NODE_PATH=/usr/local/lib/node_modules
       - NPM_PATH=/usr/bin/npm
       - NODE_BINARY_PATH=/usr/bin/node
     depends_on:
@@ -35,17 +35,6 @@ services:
       - SYS_ADMIN
     networks:
       - spatie-pdf-network
-    # Additional command to ensure NODE_PATH is correctly set
-    command: >
-      bash -c "
-        export NODE_PATH=/usr/local/lib/node_modules:/node_modules &&
-        echo 'NODE_PATH=$NODE_PATH' &&
-        # Create a script that will be sourced by interactive shells
-        echo 'export NODE_PATH=/usr/local/lib/node_modules:/node_modules' > /etc/profile.d/node_path.sh &&
-        chmod +x /etc/profile.d/node_path.sh &&
-        echo 'Setting up proper puppeteer paths' &&
-        php artisan serve --host=0.0.0.0 --port=8000
-      "
 
   mysql:
     image: mysql:8.0
