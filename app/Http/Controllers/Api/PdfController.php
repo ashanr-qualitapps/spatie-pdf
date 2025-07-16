@@ -31,6 +31,13 @@ class PdfController extends Controller
      */
     public function generatePdf($id)
     {
+        // Validate that $id is a positive integer
+        if (!ctype_digit((string)$id) || (int)$id <= 0) {
+            return response()->json([
+                'error' => 'Invalid vehicle ID'
+            ], 422);
+        }
+        
         try {
             // Log environment variables for debugging
             Log::info('NODE_PATH: ' . getenv('NODE_PATH'));
@@ -38,13 +45,13 @@ class PdfController extends Controller
             
             // Get vehicle data from API
             $vehicleData = $this->vehicleService->getVehicleById($id);
-            
-            // If API call fails, try local JSON file as fallback
+
+            // If API call fails, try fetching again from the API endpoint
             if (!$vehicleData) {
-                Log::warning("API request failed, using local JSON data");
-                $vehicleData = $this->vehicleService->getVehicleFromLocalJson();
+                Log::warning("API request failed, retrying API call for vehicle ID: {$id}");
+                $vehicleData = $this->vehicleService->getVehicleById($id);
             }
-            
+
             if (!$vehicleData) {
                 return response()->json([
                     'error' => 'Vehicle data not found',
@@ -59,22 +66,35 @@ class PdfController extends Controller
             $filename = "vehicle-{$id}-" . date('YmdHis') . ".pdf";
             $storagePath = storage_path("app/{$directory}/{$filename}");
             
-            // Generate PDF using the vehicle data and our template
-            $pdf = PdfHelper::fromView('pdfs.vehicle', [
+            // Prepare data for PDF including header and footer
+            $data = [
                 'vehicle' => $vehicleData['vehicle'] ?? $vehicleData,
                 'id' => $id
-            ]);
+            ];
+            
+            // Generate PDF with the new template, header and footer
+            $pdf = PdfHelper::fromView('pdfs.vehicle-template', $data)
+                ->headerView('pdfs.partials.header', $data)
+                ->footerView('pdfs.partials.footer', $data);
             
             // Save to storage
             $pdf->save($storagePath);
             Log::info("PDF saved to: {$storagePath}");
             
-            // Return response with download
+            // Return response with download and basic vehicle data
             return response()->json([
                 'success' => true,
                 'message' => 'PDF generated successfully',
                 'file_path' => $storagePath,
                 'download_url' => route('api.pdf.download', ['filename' => $filename]),
+                'vehicle' => [
+                    'id' => $vehicleData['vehicle']['id'] ?? null,
+                    'make' => $vehicleData['vehicle']['make'] ?? null,
+                    'model' => $vehicleData['vehicle']['model'] ?? null,
+                    'year' => $vehicleData['vehicle']['year'] ?? null,
+                    'color' => $vehicleData['vehicle']['color'] ?? null,
+                    'registrationPlate' => $vehicleData['vehicle']['registrationPlate'] ?? null,
+                ],
             ]);
         } catch (\Exception $e) {
             Log::error('PDF generation failed: ' . $e->getMessage());

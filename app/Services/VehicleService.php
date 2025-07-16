@@ -16,18 +16,15 @@ class VehicleService
     public function getVehicleById($id)
     {
         try {
-            // Get the base URL from env (or use a default for testing)
             $baseUrl = config('services.vehicle_api.url') ?? env('DATA_API_URL');
+            $baseUrl = rtrim($baseUrl, '/');
+            // Only append the ID if not already present
+            $url = "{$baseUrl}/{$id}";
             
-            // If no specific URL for the ID is provided, construct it using the base URL
-            if (!str_contains($baseUrl, '/findById/')) {
-                $baseUrl = rtrim($baseUrl, '/') . '/findById/' . $id;
-            }
-            
-            Log::info("Fetching vehicle data from: {$baseUrl}");
+            Log::info("Fetching vehicle data from: {$url}");
             
             // Make the API request
-            $response = Http::get($baseUrl);
+            $response = Http::get($url);
             
             if ($response->successful()) {
                 return $response->json();
