@@ -5,3 +5,6 @@
         <div>Ref: {{ $vehicle['vsbWip'] ?? $id ?? '' }}</div>
     </div>
 </div>
+<div style="width: 100%; text-align: center; margin-bottom: 10px;">
+    <img src="{{ $header_logo ?? asset('storage/logo-quadis.es-blanco.png') }}" alt="QUADIS Logo" style="height: 40px;">
+</div>

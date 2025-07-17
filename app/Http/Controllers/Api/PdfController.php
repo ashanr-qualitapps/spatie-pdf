@@ -75,7 +75,8 @@ class PdfController extends Controller
                 'vehicle' => $mappedVehicle,
                 'id' => $id,
                 'generated_at' => now()->format('Y-m-d H:i:s'),
-                'reference' => $mappedVehicle['vsbWip'] ?? "REF-{$id}"
+                'reference' => $mappedVehicle['vsbWip'] ?? "REF-{$id}",
+                'header_logo' => asset('storage/logo-quadis.es-blanco.png'), // Pass logo path to header
             ];
 
             // Generate PDF with the QUADIS.es template, header and footer
