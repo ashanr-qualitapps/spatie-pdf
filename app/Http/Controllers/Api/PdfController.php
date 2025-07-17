@@ -39,6 +39,11 @@ class PdfController extends Controller
         }
 
         try {
+            // Clear the view cache to ensure template changes are applied
+            if (app()->environment() !== 'production') {
+                \Artisan::call('view:clear');
+            }
+            
             // Log environment variables for debugging
             Log::info('NODE_PATH: ' . getenv('NODE_PATH'));
             Log::info('PUPPETEER_EXECUTABLE_PATH: ' . getenv('PUPPETEER_EXECUTABLE_PATH'));
@@ -76,8 +81,9 @@ class PdfController extends Controller
                 'id' => $id,
                 'generated_at' => now()->format('Y-m-d H:i:s'),
                 'reference' => $mappedVehicle['vsbWip'] ?? "REF-{$id}",
-                'header_logo' => asset('storage/logo-quadis.es-blanco.png'), // Pass logo path to header
-                'footer_logo' => asset('storage/logo-quadis.es-blanco.png'), // Pass logo path to footer
+                'header_logo' => asset('storage/logo-quadis.es-blanco.png') . '?v=' . time(), // Cache-busting parameter
+                'footer_logo' => asset('storage/logo-quadis.es-blanco.png') . '?v=' . time(), // Cache-busting parameter
+                'cache_bust' => time(), // Add a timestamp to prevent template caching
             ];
 
             // Generate PDF with the QUADIS.es template, header and footer
@@ -87,11 +93,12 @@ class PdfController extends Controller
                 ->format('A4')
                 ->margins(10, 10, 10, 10);
             
-            // Make sure assets are properly loaded with enough wait time
+            // Make sure assets are properly loaded with enough wait time and no caching
             $pdf->withBrowsershot(function($browsershot) {
                 $browsershot->noSandbox()
                            ->waitUntilNetworkIdle()
-                           ->waitForFunction('document.fonts.ready');
+                           ->waitForFunction('document.fonts.ready')
+                           ->setOption('args', ['--disable-gpu', '--disable-dev-shm-usage', '--no-cache']);
             });
 
             // Save to storage
@@ -296,6 +303,83 @@ class PdfController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Failed to retrieve vehicle data',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Generate a new PDF and redirect to download it.
+     *
+     * @param string $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getPdfUrl($id)
+    {
+        // Validate that $id is a positive integer
+        if (!ctype_digit((string)$id) || (int)$id <= 0) {
+            return response()->json([
+                'error' => 'Invalid vehicle ID'
+            ], 422);
+        }
+
+        try {
+            // Get vehicle data from API
+            $vehicleData = $this->vehicleService->getVehicleById($id);
+
+            if (!$vehicleData) {
+                return response()->json([
+                    'error' => 'Vehicle data not found',
+                ], 404);
+            }
+
+            // Extract vehicle data and apply field mapping
+            $vehicle = $vehicleData['vehicle'] ?? $vehicleData;
+            $mappedVehicle = $this->mapVehicleFields($vehicle);
+
+            // Create directory if it doesn't exist
+            $directory = 'pdfs/vehicles';
+            Storage::makeDirectory($directory);
+
+            // Generate filename
+            $filename = "quadis-" . ($mappedVehicle['make_slug'] ?? 'vehicle') . "-" . ($mappedVehicle['model_slug'] ?? 'model') . "-{$id}-" . date('YmdHis') . ".pdf";
+            $storagePath = storage_path("app/{$directory}/{$filename}");
+
+            // Prepare data for PDF
+            $data = [
+                'vehicle' => $mappedVehicle,
+                'id' => $id,
+                'generated_at' => now()->format('Y-m-d H:i:s'),
+                'reference' => $mappedVehicle['vsbWip'] ?? "REF-{$id}",
+                'header_logo' => asset('storage/logo-quadis.es-blanco.png') . '?v=' . time(),
+                'footer_logo' => asset('storage/logo-quadis.es-blanco.png') . '?v=' . time(),
+                'cache_bust' => time(),
+            ];
+
+            // Generate PDF
+            $pdf = PdfHelper::fromView('pdfs.quadis-vehicle-template', $data)
+                ->headerView('pdfs.partials.header', $data)
+                ->footerView('pdfs.partials.footer', $data)
+                ->format('A4')
+                ->margins(10, 10, 10, 10);
+            
+            $pdf->withBrowsershot(function($browsershot) {
+                $browsershot->noSandbox()
+                          ->waitUntilNetworkIdle()
+                          ->waitForFunction('document.fonts.ready');
+            });
+
+            // Save to storage
+            $pdf->save($storagePath);
+            Log::info("PDF generated and saved to: {$storagePath}");
+
+            // Redirect to download the newly generated PDF
+            return redirect(route('api.pdf.download', ['filename' => $filename]));
+            
+        } catch (\Exception $e) {
+            Log::error('PDF generation failed: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'PDF generation failed',
                 'message' => $e->getMessage()
             ], 500);
         }

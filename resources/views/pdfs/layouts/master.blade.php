@@ -33,6 +33,7 @@
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 2px solid #e0e0e0;
+            background: linear-gradient(135deg, #3e2977ff 0%, #1a8028ff 100%);
         }
 
         .logo {
@@ -54,7 +55,7 @@
 
         /* Vehicle Header */
         .vehicle-header {
-            background: linear-gradient(135deg, #2c5aa0 0%, #1a4480 100%);
+            background: linear-gradient(135deg, #449941ff 0%, #1a8028ff 100%);
             color: white;
             padding: 20px;
             margin-bottom: 20px;
@@ -377,7 +378,7 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div class="logo">QUADIS.es</div>
+            <!-- <div class="logo">QUADIS.es</div> -->
             <div class="contact-info">
                 <div>¿Tienes dudas?</div>
                 <div class="phone">¡Llámanos al 900 100 102!</div>

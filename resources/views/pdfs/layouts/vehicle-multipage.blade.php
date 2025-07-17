@@ -320,7 +320,7 @@
         @if(isset($page) && $page == 1)
         <!-- Header only on first page -->
         <div class="page-header">
-            <div class="logo">QUADIS.es</div>
+            <!-- <div class="logo">QUADIS.es</div> -->
             <div class="contact-info">
                 <div>¿Tienes dudas?</div>
                 <div class="phone">¡Llámanos al 900 100 102!</div>

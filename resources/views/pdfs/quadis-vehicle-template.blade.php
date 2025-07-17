@@ -1,6 +1,6 @@
 @extends('pdfs.layouts.master')
 
-@section('title', 'QUADIS.es - ' . ($vehicle['make'] ?? '') . ' ' . ($vehicle['model'] ?? ''))
+<!-- @section('title', 'QUADIS.es - ' . ($vehicle['make'] ?? '') . ' ' . ($vehicle['model'] ?? '')) -->
 
 @section('content')
     <!-- Vehicle Header -->
