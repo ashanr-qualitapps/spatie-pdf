@@ -24,12 +24,15 @@ class VehicleService
             Log::info("Fetching vehicle data from: {$url}");
             
             // Make the API request
-            $response = Http::get($url);
+            $response = Http::timeout(20)->get($url);
             
             if ($response->successful()) {
-                return $response->json();
+                $json = $response->json();
+                Log::info("API response for vehicle {$id}: " . json_encode($json));
+                // If the API wraps the vehicle in a 'vehicle' key, unwrap it
+                return $json['vehicle'] ?? $json;
             } else {
-                Log::error("API request failed for vehicle ID {$id}: " . $response->status());
+                Log::error("API request failed for vehicle ID {$id}: " . $response->status() . " - " . $response->body());
                 return null;
             }
         } catch (\Exception $e) {

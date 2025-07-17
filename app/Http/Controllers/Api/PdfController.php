@@ -77,6 +77,7 @@ class PdfController extends Controller
                 'generated_at' => now()->format('Y-m-d H:i:s'),
                 'reference' => $mappedVehicle['vsbWip'] ?? "REF-{$id}",
                 'header_logo' => asset('storage/logo-quadis.es-blanco.png'), // Pass logo path to header
+                'footer_logo' => asset('storage/logo-quadis.es-blanco.png'), // Pass logo path to footer
             ];
 
             // Generate PDF with the QUADIS.es template, header and footer
@@ -85,6 +86,13 @@ class PdfController extends Controller
                 ->footerView('pdfs.partials.footer', $data)
                 ->format('A4')
                 ->margins(10, 10, 10, 10);
+            
+            // Make sure assets are properly loaded with enough wait time
+            $pdf->withBrowsershot(function($browsershot) {
+                $browsershot->noSandbox()
+                           ->waitUntilNetworkIdle()
+                           ->waitForFunction('document.fonts.ready');
+            });
 
             // Save to storage
             $pdf->save($storagePath);

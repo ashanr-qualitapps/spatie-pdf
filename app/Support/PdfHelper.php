@@ -4,6 +4,7 @@ namespace App\Support;
 
 use Spatie\LaravelPdf\Facades\Pdf;
 use Illuminate\Support\Facades\Log;
+use Spatie\LaravelPdf\PdfBuilder;
 
 class PdfHelper
 {
