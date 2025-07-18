@@ -17,7 +17,7 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 60px; /* Fixed height for header */
+        height: 100px; /* Fixed height for header */
         display: flex;
         align-items: center;
     }
@@ -49,7 +49,7 @@
 <div class="header">
     <div class="header-content">
         <div class="logo-section">
-            <img src="{{ $header_logo }}" alt="Quadis Logo" style="height: 30px;">
+            <img src="{{ $header_logo }}" alt="Logo" style="height: 60px;">
         </div>
         <div class="contact-section">
             ¿Tienes dudas?<br>

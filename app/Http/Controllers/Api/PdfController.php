@@ -76,13 +76,17 @@ class PdfController extends Controller
             $storagePath = storage_path("app/{$directory}/{$filename}");
 
             // Prepare data for PDF including header and footer
+            $header_logo_asset = asset('storage/logo.png') . '?v=' . time();
+            $header_logo_path = public_path('storage/logo.png');
             $data = [
                 'vehicle' => $mappedVehicle,
                 'id' => $id,
                 'generated_at' => now()->format('Y-m-d H:i:s'),
                 'reference' => $mappedVehicle['vsbWip'] ?? "REF-{$id}",
-                'header_logo' => asset('storage/logo-quadis.es-blanco.png') . '?v=' . time(), // Cache-busting parameter
-                'footer_logo' => asset('storage/logo-quadis.es-blanco.png') . '?v=' . time(), // Cache-busting parameter
+                'header_logo' => $header_logo_asset,
+                'header_logo_path' => $header_logo_path,
+                'footer_logo' => $header_logo_asset,
+                'footer_logo_path' => $header_logo_path,
                 'cache_bust' => time(), // Add a timestamp to prevent template caching
             ];
 
@@ -345,14 +349,19 @@ class PdfController extends Controller
             $filename = "quadis-" . ($mappedVehicle['make_slug'] ?? 'vehicle') . "-" . ($mappedVehicle['model_slug'] ?? 'model') . "-{$id}-" . date('YmdHis') . ".pdf";
             $storagePath = storage_path("app/{$directory}/{$filename}");
 
-            // Prepare data for PDF
+            $header_logo_path = public_path('logo.png');
+            $footer_logo_path = $header_logo_path; // Reuse if same logo
+
+          // Base64 encode for embedding
+            $header_logo_base64 = 'data:image/png;base64,' . base64_encode(file_get_contents($header_logo_path));
+            $footer_logo_base64 = $header_logo_base64;
             $data = [
                 'vehicle' => $mappedVehicle,
                 'id' => $id,
                 'generated_at' => now()->format('Y-m-d H:i:s'),
                 'reference' => $mappedVehicle['vsbWip'] ?? "REF-{$id}",
-                'header_logo' => asset('storage/logo-quadis.es-blanco.png') . '?v=' . time(),
-                'footer_logo' => asset('storage/logo-quadis.es-blanco.png') . '?v=' . time(),
+                'header_logo' => $header_logo_base64,
+                'footer_logo' => $footer_logo_base64,
                 'cache_bust' => time(),
             ];
 

@@ -341,7 +341,7 @@
             @if(isset($page) && $page != 1)
             <!-- Bottom footer only on pages 2 and 3 -->
             <div class="bottom-footer">
-                <img src="{{ asset('storage/logo-quadis.es-blanco.png') }}" alt="QUADIS.es" class="logo-img">
+                <img src="{{ asset('logo.png') }}" alt="Logo" class="logo-img">
                 <div class="phone">¿Tienes dudas? ¡Llámanos al 900 100 102!</div>
             </div>
             @endif
