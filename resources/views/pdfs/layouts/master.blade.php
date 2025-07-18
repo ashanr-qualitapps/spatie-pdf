@@ -17,6 +17,19 @@
             line-height: 1.4;
             color: #333;
             background: #fff;
+            padding-top: 70px; /* Add global top padding to prevent header overlap */
+        }
+        
+        /* Ensure each page has top padding after page break */
+        .page-break {
+            page-break-before: always;
+            height: 1px; /* Minimal height */
+        }
+        
+        .page-break::after {
+            content: "";
+            display: block;
+            height: 70px; /* Space after page break */
         }
 
         .container {
@@ -376,7 +389,6 @@
 </head>
 <body>
     <div class="container">
-
         <!-- Content -->
         @yield('content')   
     </div>

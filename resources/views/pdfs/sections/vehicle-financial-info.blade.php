@@ -1,6 +1,6 @@
-    @if(!empty($vehicle['financialInformation']['descriptionMonthlyPayment']))
+@if(!empty($vehicle['financialInformation']['descriptionMonthlyPayment']))
         <div class="page-break"></div>
-        <div class="characteristics-section">
+        <div class="characteristics-section" style="padding-top: 70px;">
             <h2 class="section-title">Información de Financiación</h2>
             <div class="description-content">
                 <table style="width: 100%; margin-bottom: 15px;">
