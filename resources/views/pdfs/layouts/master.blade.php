@@ -376,31 +376,9 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <!-- <div class="logo">QUADIS.es</div> -->
-            <div class="contact-info">
-                <div>¿Tienes dudas?</div>
-                <div class="phone">¡Llámanos al 900 100 102!</div>
-            </div>
-        </div>
 
         <!-- Content -->
-        @yield('content')
-
-        <!-- Footer -->
-        <div class="footer">
-            <div class="legal-notice">
-                <h4>Aviso legal</h4>
-                <p>La información incluida en este folleto electrónico tiene un carácter meramente informativo. Ha sido generada en el momento de su descarga y está sujeta a posibles modificaciones sin previo aviso. En QUADIS nos esforzamos por garantizar que los datos, especificaciones y precios mostrados sean lo más precisos y actuales posible. No obstante, pueden producirse errores o variaciones.</p>
-                <p>Para consultar la información actualizada sobre este vehículo, por favor visita: <strong>www.quadis.es</strong></p>
-            </div>
-
-            <div class="contact-footer">
-                <div class="logo">QUADIS.es</div>
-                <div class="phone">¿Tienes dudas? ¡Llámanos al 900 100 102!</div>
-            </div>
-        </div>
+        @yield('content')   
     </div>
 
     @yield('scripts')
