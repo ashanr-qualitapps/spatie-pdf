@@ -3,6 +3,24 @@
 <!-- @section('title', 'QUADIS.es - ' . ($vehicle['make'] ?? '') . ' ' . ($vehicle['model'] ?? '')) -->
 
 @section('content')
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        padding-top: 60px; /* Add space for fixed header */
+    }
+    
+    .content-wrapper {
+        padding: 20px;
+        margin-top: 0;
+    }
+    
+    /* Your existing styles... */
+</style>
+
+
+<div class="content-wrapper">
     <!-- Vehicle Header -->
     <div class="vehicle-header">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
@@ -273,4 +291,6 @@
             </div>
         </div>
     @endif
+
+    </div> <!-- End of content-wrapper -->
 @endsection

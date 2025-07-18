@@ -361,13 +361,13 @@ class PdfController extends Controller
                 ->headerView('pdfs.partials.header', $data)
                 ->footerView('pdfs.partials.footer', $data)
                 ->format('A4')
-                ->margins(10, 10, 10, 10);
+                ->margins(0, 0, 10, 0);
             
             $pdf->withBrowsershot(function($browsershot) {
                 $browsershot->noSandbox()
-                          ->waitUntilNetworkIdle()
-                          ->waitForFunction('document.fonts.ready');
-            });
+              ->waitUntilNetworkIdle()
+              ->waitForFunction('document.fonts.ready')
+              ->emulateMedia('print');            });
 
             // Save to storage
             $pdf->save($storagePath);
