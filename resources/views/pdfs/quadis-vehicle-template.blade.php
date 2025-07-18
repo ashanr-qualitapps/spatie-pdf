@@ -19,12 +19,6 @@
         <!-- Vehicle Header -->
         @include('pdfs.sections.vehicle-basic-info', ['vehicle' => $vehicle])
 
-        <!-- Price Section -->
-        @include('pdfs.sections.vehicle-price-info', ['vehicle' => $vehicle])
-
-        <!-- Main Vehicle Image -->
-        @include('pdfs.sections.vehicle-images', ['vehicle' => $vehicle])
-
         <!-- Vehicle Characteristics -->
         @include('pdfs.sections.vehicle-characteristics', ['vehicle' => $vehicle])
 

@@ -10,6 +10,7 @@ use App\Services\VehicleService;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\PdfAsset;
 
 class PdfController extends Controller
 {
@@ -352,6 +353,31 @@ class PdfController extends Controller
             $header_logo_path = public_path('logo.png');
             $footer_logo_path = $header_logo_path; // Reuse if same logo
 
+            $characteristicIcons = [
+                // Básicos
+                'matriculation' => PdfAsset::base64('icons/icon-matricula.png'),
+                'kilometers'    => PdfAsset::base64('icons/icon-kms.png'),
+
+                // Motorización y distintivos
+                'fuel'          => PdfAsset::base64('icons/icon-combustible.png'),
+                'env_label'     => PdfAsset::base64('icons/icon-fondo.png'),
+
+                // Mecánicos
+                'gearbox'       => PdfAsset::base64('icons/icon-transmision.png'),
+                'drive_train'   => PdfAsset::base64('icons/icon-traccion.png'),
+                'power'         => PdfAsset::base64('icons/icon-potencia.png'),
+
+                // Carrocería
+                'doors'         => PdfAsset::base64('icons/icon-puertas.png'),
+                'seats'         => PdfAsset::base64('icons/icon-asientos.png'),
+                'color'         => PdfAsset::base64('icons/icon-pintura.png'),
+                'body'          => PdfAsset::base64('icons/icon-coches-compacto.png'),
+
+                // Garantía y tipo
+                'warranty'      => PdfAsset::base64('icons/icon-garantia.png'),
+                'vehicle_type'  => PdfAsset::base64('icons/icon-tipo.png'),
+            ];
+
           // Base64 encode for embedding
             $header_logo_base64 = 'data:image/png;base64,' . base64_encode(file_get_contents($header_logo_path));
             $footer_logo_base64 = $header_logo_base64;
@@ -363,6 +389,7 @@ class PdfController extends Controller
                 'header_logo' => $header_logo_base64,
                 'footer_logo' => $footer_logo_base64,
                 'cache_bust' => time(),
+                'icons'=> $characteristicIcons,
             ];
 
             // Generate PDF
