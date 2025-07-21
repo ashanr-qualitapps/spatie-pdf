@@ -10,10 +10,27 @@
 
  body{margin:0;padding:0}
 
-  .pdf-header {
-    display: block !important;
-    width: 100%;
-    margin-bottom: 20px;
+.pdf-header {
+    /* Fix width issues */
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100%;
+    
+    /* Fix margin/spacing issues */
+    margin: 0 !important;
+    padding: 15px 0 15px 0; /* Only bottom padding for spacing */
+    
+    /* Layout properties */
+    display: block;
+    box-sizing: border-box;
+    position: relative;
+    left: 0;
+    right: 0;
+    top: 0;
+    
+    /* Visual styling */
+    border-bottom: 3px solid #f5a100;
+    background: transparent;
 }
 
 .page{
@@ -46,7 +63,6 @@
 
 .first-page .characteristics { 
     max-height: 270px; 
-    margin-top: 20px;
 }
 /* Basic info without yellow border */
 .basic-info {

@@ -12,15 +12,7 @@
         }
 
 
-        body {
-            font-family: 'Arial', sans-serif;
-            font-size: 12px;
-            line-height: 1.4;
-            color: #333;
-            background: #fff;
-            padding-top: 70px; /* Add global top padding to prevent header overlap */
-        }
-        
+  
         /* Ensure each page has top padding after page break */
         .page-break {
             page-break-before: always;
@@ -41,13 +33,12 @@
 
         /* Header Styles */
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2c5aa0;
-        }
-
-        .contact-info {
+        .header {
+            background-color: #f8f9fa;
+            padding: 10px 20px;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: center;
+        }        .contact-info {
             text-align: right;
             color: #666;
         }
@@ -59,96 +50,7 @@
         }
 
         /* Vehicle Header */
-        .vehicle-header {
-            background: linear-gradient(135deg, #449941ff 0%, #1a8028ff 100%);
-            color: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-
-        .vehicle-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .vehicle-version {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-
-        .vehicle-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .ref-number {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        .fuel-type {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-        }
-
-        .warranty {
-            background: #28a745;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-        }
-
-        /* Price Section */
-        .price-section {
-            background: #f8f9fa;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #2c5aa0;
-        }
-
-        .price-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .price-item {
-            text-align: center;
-        }
-
-        .price-label {
-            font-size: 11px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .price-value {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2c5aa0;
-        }
-
-        .price-value.financed {
-            color: #28a745;
-        }
-
-        .price-value.monthly {
-            color: #dc3545;
-        }
-
-        /* Image Section */
-        .image-section {
-            margin-bottom: 20px;
-        }
+       
 
         .main-image {
             width: 100%;
@@ -236,105 +138,11 @@
             font-size: 11px;
         }
 
-        /* Description */
-        .description-section {
-            margin-bottom: 20px;
-        }
+  
+      
 
-        .description-content {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            line-height: 1.6;
-            font-size: 11px;
-        }
 
-        .description-content h3 {
-            color: #2c5aa0;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
 
-        .description-content p {
-            margin-bottom: 10px;
-        }
-
-        /* Images Gallery */
-        .images-gallery {
-            margin-bottom: 20px;
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .gallery-image {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-            font-size: 10px;
-            color: #666;
-        }
-
-        .legal-notice {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
-
-        .legal-notice h4 {
-            color: #2c5aa0;
-            margin-bottom: 10px;
-        }
-
-        .contact-footer {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .contact-footer .logo {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .contact-footer .phone {
-            font-size: 12px;
-        }
-
-        /* Environmental Label */
-        .env-label {
-            background: #28a745;
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-        .env-label.label-0 {
-            background: #007bff;
-        }
-
-        .env-label.label-eco {
-            background: #28a745;
-        }
-
-        .env-label.label-c {
-            background: #ffc107;
-            color: #000;
-        }
 
         /* Responsive adjustments for PDF */
         @media print {

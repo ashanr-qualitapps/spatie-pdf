@@ -394,7 +394,6 @@ class PdfController extends Controller
 
             // Generate PDF
             $pdf = PdfHelper::fromView('pdfs.quadis-vehicle-template', $data)
-                // ->headerView('pdfs.partials.header', $data)
                 ->footerView('pdfs.partials.footer', $data)
                 ->format('A4')
                 ->margins(0, 0, 10, 0);
