@@ -7,7 +7,7 @@
     .ch-box{
         border:2px solid #f5a100;           /* orange stroke */
         border-radius:26px;
-        padding:34px 40px;
+        padding:17px 20px;
         -webkit-print-color-adjust:exact;
         print-color-adjust:exact;
     }
