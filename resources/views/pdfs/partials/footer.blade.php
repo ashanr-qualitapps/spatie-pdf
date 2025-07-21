@@ -1,5 +1,7 @@
 <style>
     @media print {
+
+
     /* --- Wrapper and General Layout --- */
     .footer-wrapper {
         margin-top: 30px;
@@ -16,6 +18,7 @@
         padding: 20px 30px;
         border-radius: 0;
         margin: 0;
+          width: 100%;
         -webkit-print-color-adjust: exact;      /* Force background colors in PDF */
         print-color-adjust: exact;              /* Standard property */
         color-adjust: exact;                    /* Additional browser support */
@@ -46,10 +49,13 @@
 
     /* --- Black Footer Section --- */
     .black-footer {
-        background-color: #000;
+        background-color: #000 !important;
         color: #fff;
-        padding: 20px;
-        text-align: center;
+        padding: 20px 30px;
+        margin: 0;
+        width: 100%;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
     .black-footer__content-wrapper {
         display: inline-block; /* Helps with centering */
@@ -75,6 +81,9 @@
         font-weight: normal;
         margin-top: 5px;
     }
+
+
+
 </style>
 
 
@@ -97,7 +106,7 @@
     </div>
 
     {{-- Only show footer on pages after the second page --}}
-    @if(isset($pageNumber) && $pageNumber > 2)
+@if(isset($showBlackFooter) && $showBlackFooter)
     {{-- Black Footer Section --}}
     <div class="black-footer">
         <div class="black-footer__content-wrapper">

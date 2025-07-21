@@ -8,7 +8,6 @@
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
 
@@ -27,7 +26,7 @@
 
         .container {
             max-width: 210mm;
-            margin: 0 auto;
+            margin: 0 ;
             padding: 15mm;
         }
 
@@ -138,17 +137,10 @@
             font-size: 11px;
         }
 
-  
       
-
-
-
 
         /* Responsive adjustments for PDF */
         @media print {
-            .container {
-                padding: 10mm;
-            }
 
             .page-break {
                 page-break-before: always;

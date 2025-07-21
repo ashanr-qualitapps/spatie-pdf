@@ -23,10 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // PDF Generation Routes
 Route::prefix('pdf')->group(function () {
-    // Generate PDF for a specific vehicle
-    Route::get('{id}/generate', [PdfController::class, 'generatePdf'])
-        ->name('api.pdf.generate')
-        ->where('id', '[0-9]+');
 
     // Download generated PDF
     Route::get('download/{filename}', [PdfController::class, 'downloadPdf'])
@@ -39,10 +35,6 @@ Route::prefix('pdf')->group(function () {
         ->where('id', '[0-9]+');
 });
 
-// Legacy route for backward compatibility
-Route::get('{id}/generate-pdf', [PdfController::class, 'generatePdf'])
-    ->name('api.pdf.generate.legacy')
-    ->where('id', '[0-9]+');
 
 // Health check route
 Route::get('/health', function () {

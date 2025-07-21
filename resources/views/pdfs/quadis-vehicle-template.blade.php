@@ -4,8 +4,25 @@
 
 {{-- INLINE CSS (you can move it to resources/css/pdf.css if you prefer) --}}
 <style>
-@page {  size:A4 portrait;
-    margin:40px 15px 85px 15px;   /* 70 + 20  /  80 + 5  */
+@page { 
+    
+    size:A4 portrait;
+    margin:40px 15px 85px 15px;   70 + 20  /  80 + 5 
+
+
+    /* Footer Full Width Styles */
+    .footer-wrapper,
+    .legal-section,
+    .black-footer {
+        width: 100% !important;
+        margin-left: -50px !important;    /* Compensate for page left padding */
+        margin-right: -50px !important;   /* Compensate for page right padding */
+        padding-left: 50px !important;    /* Restore content padding */
+        padding-right: 50px !important;   /* Restore content padding */
+        box-sizing: border-box;
+    }
+
+
  }   /* pdf has its own margins inside .page */
 
  body{margin:0;padding:0}
@@ -119,6 +136,8 @@
     grid-template-columns:repeat(3,1fr);
     gap:12px;
 }
+
+
 </style>
 
 
@@ -171,6 +190,11 @@
             </div>
         </div>
     @endif
+
+      
+    {{-- Include black footer on page 2 --}}
+    @include('pdfs.partials.footer', ['showBlackFooter' => true]) 
+
 </div>
 
 
@@ -179,6 +203,9 @@
     @include('pdfs.sections.vehicle-images-gallary', ['vehicle' => $vehicle])
 
     @include('pdfs.sections.vehicle-financial-info', ['vehicle' => $vehicle])
+
+    {{-- Include black footer on page 3 --}}
+    @include('pdfs.partials.footer', ['showBlackFooter' => true])
 </div>
 
 @endsection
