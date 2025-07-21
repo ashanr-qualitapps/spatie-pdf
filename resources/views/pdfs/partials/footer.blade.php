@@ -1,4 +1,5 @@
 <style>
+    @media print {
     /* --- Wrapper and General Layout --- */
     .footer-wrapper {
         margin-top: 30px;
@@ -11,30 +12,36 @@
 
     /* --- Light Gray Legal Section --- */
     .legal-section {
-        background-color: #c5c7c0 !important; /* Hex codes don't need the 'ff' alpha part */
-        border: 1px solid #dee2e6;
-        padding: 20px;
-        color: #212529;
-        font-size: 10px;
-        line-height: 1.5;
+        background-color: #f5f5f5 !important;  /* Light gray background */
+        padding: 20px 30px;
+        border-radius: 0;
+        margin: 0;
+        -webkit-print-color-adjust: exact;      /* Force background colors in PDF */
+        print-color-adjust: exact;              /* Standard property */
+        color-adjust: exact;                    /* Additional browser support */
     }
+}
     .legal-section__title {
-        color: #212529;
+        font-size: 14px;
+        font-weight: 700;
+        color: #333;
         margin: 0 0 12px 0;
-        font-size: 12px;
-        font-weight: bold;
     }
+
     .legal-section__text {
-        margin: 0 0 12px 0;
-        text-align: justify;
+        font-size: 11px;
+        line-height: 1.4;
+        color: #555;
+        margin: 0 0 10px 0;
     }
+
     .legal-section__text--last {
         margin-bottom: 0;
-        text-align: left; /* The last paragraph was not justified */
     }
+
     .legal-section__link {
-        color: #212529;
-        font-weight: bold;
+        color: #000;
+        font-weight: 600;
     }
 
     /* --- Black Footer Section --- */
@@ -89,6 +96,8 @@
         </p>
     </div>
 
+    {{-- Only show footer on pages after the second page --}}
+    @if(isset($pageNumber) && $pageNumber > 2)
     {{-- Black Footer Section --}}
     <div class="black-footer">
         <div class="black-footer__content-wrapper">
@@ -108,4 +117,5 @@
             </div>
         </div>
     </div>
+    @endif
 </div>

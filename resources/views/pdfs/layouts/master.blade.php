@@ -40,15 +40,6 @@
         }
 
         /* Header Styles */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e0e0e0;
-            background: linear-gradient(135deg, #3e2977ff 0%, #1a8028ff 100%);
-        }
 
         .logo {
             font-size: 24px;

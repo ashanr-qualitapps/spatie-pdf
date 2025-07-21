@@ -9,6 +9,13 @@
  }   /* pdf has its own margins inside .page */
 
  body{margin:0;padding:0}
+
+  .pdf-header {
+    display: block !important;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
 .page{
     /* one HTML wrapper = one printed sheet  --------------------------- */
     display:block;            /* HAS to be block for the rule to work   */
@@ -103,8 +110,8 @@
 
     {{-- header / logo / banner (if you have one) ----------------------- --}}
     @includeWhen(
-        View::exists('pdfs.sections.vehicle-header'),
-        'pdfs.sections.vehicle-header',
+        View::exists('pdfs.partials.header'),
+        'pdfs.partials.header',
         ['vehicle' => $vehicle]
     )
 
