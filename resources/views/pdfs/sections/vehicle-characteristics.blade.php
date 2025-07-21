@@ -1,13 +1,13 @@
 <style>
     /* ===== Wrapper ===== */
-    .ch-section{font-family:Arial, sans-serif;margin:30px 0;page-break-inside:avoid;}
-    .ch-title  {font-size:24px;font-weight:700;text-align:center;margin-bottom:18px;}
+    .ch-section{font-family:Arial, sans-serif;margin:20px 0;page-break-inside:avoid;}
+    .ch-title  {font-size:20px;font-weight:700;text-align:center;margin-bottom:12px;}
 
     /* ===== Rounded box ===== */
     .ch-box{
         border:2px solid #f5a100;           /* orange stroke */
-        border-radius:26px;
-        padding:17px 20px;
+        border-radius:18px;
+        padding:12px 16px;
         -webkit-print-color-adjust:exact;
         print-color-adjust:exact;
     }
@@ -16,22 +16,23 @@
     .ch-grid{
         display:grid;
         grid-template-columns:repeat(2,1fr);
-        grid-column-gap:48px;
-        grid-row-gap:28px;
+        grid-column-gap:32px;
+        grid-row-gap:16px;
     }
 
     /* ===== Single item ===== */
     .ch-item{display:flex;align-items:flex-start;}
-    .ch-item img{width:22px;height:22px;margin-right:12px;}
+    .ch-item img{width:18px;height:18px;margin-right:8px;}
 
-    .ch-label {font-size:12px;color:#6d6d6d;}
-    .ch-value {font-size:14px;font-weight:700;display:block;}
+    .ch-label {font-size:10px;color:#6d6d6d;}
+    .ch-value {font-size:12px;font-weight:700;display:block;line-height:1.2;}
 
     /* Pills */
-    .pill        {display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;line-height:1;}
+    .pill        {display:inline-block;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600;line-height:1;}
     .pill--blue  {background:#6f84ff;color:#fff;}
     .pill--sky   {background:#50b9fd;color:#000;}
 </style>
+
 
 
 <div class="ch-section">

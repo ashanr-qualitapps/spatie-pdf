@@ -5,7 +5,7 @@
 {{-- INLINE CSS (you can move it to resources/css/pdf.css if you prefer) --}}
 <style>
 @page {  size:A4 portrait;
-    margin:90px 15px 85px 15px;   /* 70 + 20  /  80 + 5  */
+    margin:40px 15px 85px 15px;   /* 70 + 20  /  80 + 5  */
  }   /* pdf has its own margins inside .page */
 
  body{margin:0;padding:0}
@@ -29,19 +29,49 @@
     page-break-before: always;
 }
 
-/* FIRST PAGE sizes so “Características” still fits -------------------- */
-.first-page  .basic-info     { max-height:300px; margin-bottom:20px; }
-.first-page  .characteristics{ max-height:270px; }
+/* FIRST PAGE sizes so "Características" still fits -------------------- */
+.first-page .basic-info { 
+    max-height: 300px; 
+    margin-bottom: 20px;
+    width: 100%;                    /* Use full available width */
+    max-width: none;                /* Remove any width restrictions */
+}
 
-.characteristics-title{
-    font: 700 22px/1.2 'Montserrat', sans-serif;
-    text-align:center;
-    margin:0 0 15px;
+.first-page .characteristics { 
+    max-height: 270px; 
+    margin-top: 20px;
+}
+/* Basic info without yellow border */
+.basic-info {
+    border-radius: 22px;
+    padding: 22px 26px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 45px;
+    font-size: 11px;
+    width: 100%;                    /* Full width */
+    box-sizing: border-box;         /* Include padding in width calculation */
+}
+
+/* CHARACTERISTICS SECTION  */
+.characteristics {
+    border-radius: 22px;
+    padding: 22px 26px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 25px;
+    margin-top: 20px; /* Add margin to separate from basic-info */
+    font-size: 11px;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;               /* Prevent overlap */
+    z-index: 2;                      /* Ensure it renders above basic-info */
+    clear: both;                     /* Clear any floats */
+    margin-top: 10px;                /* Small gap from basic-info */
 }
 
 /* Generic white rounded boxes ---------------------------------------- */
-.basic-info,
-.characteristics,
+
 .characteristics-section,
 .description-section,
 .technical-details{
@@ -84,7 +114,7 @@
     </div>
 
     {{-- “Características” --------------------------------------------- --}}
-    <h2 class="characteristics-title">Características</h2>
+  
     <div class="characteristics">
         @include('pdfs.sections.vehicle-characteristics', ['vehicle' => $vehicle])
     </div>
