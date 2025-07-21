@@ -106,7 +106,7 @@
     </div>
 
     {{-- Only show footer on pages after the second page --}}
-@if(isset($showBlackFooter) && $showBlackFooter)
+    @if(isset($showBlackFooter) && $showBlackFooter)
     {{-- Black Footer Section --}}
     <div class="black-footer">
         <div class="black-footer__content-wrapper">
@@ -114,8 +114,6 @@
             <div class="black-footer__logo-container">
                 @if(isset($footer_logo))
                 <img src="{{ $footer_logo }}" alt="QUADIS.es" class="black-footer__logo">
-                @else
-                    <div class="black-footer__logo-fallback">QUADIS.es</div>
                 @endif
             </div>
 

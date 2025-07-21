@@ -143,12 +143,6 @@
 
 <div class="page first-page">
 
-    {{-- header / logo / banner (if you have one) ----------------------- --}}
-    @includeWhen(
-        View::exists('pdfs.partials.header'),
-        'pdfs.partials.header',
-        ['vehicle' => $vehicle]
-    )
 
     {{-- Basic information --------------------------------------------- --}}
     <div class="basic-info">
@@ -190,10 +184,8 @@
             </div>
         </div>
     @endif
-
-      
-    {{-- Include black footer on page 2 --}}
-    @include('pdfs.partials.footer', ['showBlackFooter' => true]) 
+    
+   
 
 </div>
 
@@ -204,8 +196,6 @@
 
     @include('pdfs.sections.vehicle-financial-info', ['vehicle' => $vehicle])
 
-    {{-- Include black footer on page 3 --}}
-    @include('pdfs.partials.footer', ['showBlackFooter' => true])
 </div>
 
 @endsection
