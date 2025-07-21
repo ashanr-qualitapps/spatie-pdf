@@ -279,9 +279,6 @@ class PdfController extends Controller
 
             // Generate PDF
             $pdf = PdfHelper::fromView('pdfs.quadis-vehicle-template', $data)
-                ->headerHtml(view('pdfs.partials.header', [
-                    'header_logo' => $header_logo_base64
-                ]))
                 ->footerHtml(view('pdfs.partials.footer', [
                     'showBlackFooter' => false,
                     'footerLogo' => $footer_logo_base64,

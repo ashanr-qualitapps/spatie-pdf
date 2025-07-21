@@ -9,8 +9,6 @@
             margin: 0;
             padding: 0;
         }
-
-
   
         /* Ensure each page has top padding after page break */
         .page-break {
@@ -30,25 +28,6 @@
             padding: 15mm;
         }
 
-        /* Header Styles */
-
-        .header {
-            background-color: #f8f9fa;
-            padding: 10px 20px;
-            border-bottom: 2px solid #e0e0e0;
-            text-align: center;
-        }        .contact-info {
-            text-align: right;
-            color: #666;
-        }
-
-        .phone {
-            font-size: 14px;
-            font-weight: bold;
-            color: #2c5aa0;
-        }
-
-        /* Vehicle Header */
        
 
         .main-image {

@@ -1,16 +1,15 @@
 @extends('pdfs.layouts.master')
-
-@section('content')
-
-{{-- INLINE CSS (you can move it to resources/css/pdf.css if you prefer) --}}
+@section('styles')
 <style>
 @page { 
-    
     size:A4 portrait;
-    margin:40px 15px 85px 15px;   70 + 20  /  80 + 5 
-
-
+    margin: 20mm 15mm 20mm 15mm;   /* T / R / B / L */
     /* Footer Full Width Styles */
+
+
+ }   /* pdf has its own margins inside .page */
+
+
     .footer-wrapper,
     .legal-section,
     .black-footer {
@@ -22,33 +21,16 @@
         box-sizing: border-box;
     }
 
-
- }   /* pdf has its own margins inside .page */
+ /* first sheet */
+@page:first{
+    margin: 30mm 0 20mm 0;           /* 30 mm header, 0 side margins */
+    @top-center{
+        content: element(firstHeader);    /* place the running header here */
+    }
+}
 
  body{margin:0;padding:0}
 
-.pdf-header {
-    /* Fix width issues */
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 100%;
-    
-    /* Fix margin/spacing issues */
-    margin: 0 !important;
-    padding: 15px 0 15px 0; /* Only bottom padding for spacing */
-    
-    /* Layout properties */
-    display: block;
-    box-sizing: border-box;
-    position: relative;
-    left: 0;
-    right: 0;
-    top: 0;
-    
-    /* Visual styling */
-    border-bottom: 3px solid #f5a100;
-    background: transparent;
-}
 
 .page{
     /* one HTML wrapper = one printed sheet  --------------------------- */
@@ -56,8 +38,11 @@
     width:100%;
     break-after: page;        /* modern paged-media syntax              */
     page-break-after: always; /* legacy syntax (Chrome fallback)        */
-    padding: 40px 50px 60px;  /* inner margins of every sheet           */
+    padding:0;             /* no inner space, we use margins instead */
 }
+
+.sheet-body{ padding:40px 50px 60px;}
+
 .page:last-of-type{
     break-after: auto;
     page-break-after: auto;
@@ -78,9 +63,7 @@
     max-width: none;                /* Remove any width restrictions */
 }
 
-.first-page .characteristics { 
-    max-height: 270px; 
-}
+
 /* Basic info without yellow border */
 .basic-info {
     border-radius: 22px;
@@ -137,13 +120,43 @@
     gap:12px;
 }
 
+/* goes in the <head> of the template, before any page is laid out */
+.first-page-header{
+    position: running(firstHeader);   /* lift into page margin           */
+    height: 30mm;                     /* ≈10 % of A4 height              */
+    width: 100%;
+
+    /* ABSOLUTELY NO OUTER SPACE */
+    margin: 0;                        /* ← kill margins                  */
+    padding: 0;                       /* ← kill padding on all sides     */
+
+    background:#000;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    -webkit-print-color-adjust:exact;
+            print-color-adjust:exact;
+}
+
 
 </style>
+@endsection
 
+
+@section('content')
+  
+        <div class="first-page-header">
+            <img src="{{ $header_logo }}" alt="Logo" style="height:22mm">
+            <div style="font:700 16px/1.2 'Montserrat',sans-serif">
+                ¿Tienes dudas?<br>¡Llámanos al 900 100 102!
+            </div>
+        </div>
 
 <div class="page first-page">
 
-
+    {{-- Header with logo and contact info ------------------------------- --}}
     {{-- Basic information --------------------------------------------- --}}
     <div class="basic-info">
         @include('pdfs.sections.vehicle-basic-info', ['vehicle' => $vehicle])
