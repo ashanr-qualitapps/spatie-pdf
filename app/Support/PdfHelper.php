@@ -3,111 +3,153 @@
 namespace App\Support;
 
 use Spatie\LaravelPdf\Facades\Pdf;
-use Spatie\LaravelPdf\PdfBuilder;
 use Illuminate\Support\Facades\Log;
+use Spatie\LaravelPdf\PdfBuilder;
 
 class PdfHelper
 {
     /**
-     * Get the Chrome executable path
-     *
-     * @return string
+     * Create a PDF from HTML content
      */
-    protected static function getChromePath(): string
+    public static function fromHtml($html, $outputPath = null)
     {
-        // Try multiple possible paths in order of preference
-        $possiblePaths = [
-            '/usr/bin/chromium',
-            '/usr/bin/chromium-browser',
-            '/usr/bin/chrome',
-            '/usr/bin/google-chrome',
-            '/usr/local/bin/chromium',
-            '/usr/local/bin/chrome',
-            '/usr/local/bin/google-chrome'
-        ];
-
-        // First try environment variables
-        $envPath = env('PUPPETEER_EXECUTABLE_PATH') ?? env('CHROME_PATH');
+        // Ensure Chrome is registered with Puppeteer
+        PuppeteerSetup::registerChrome();
         
-        if ($envPath && file_exists($envPath)) {
-            Log::info('Using Chrome path from environment: ' . $envPath);
-            return $envPath;
+        $pdf = Pdf::html($html)
+            ->withBrowsershot(function ($browsershot) {
+                $chromePath = self::getChromePath();
+                Log::info("Using Chrome path: {$chromePath}");
+                
+                $browsershot->noSandbox()
+                    ->setNodeBinary(getenv('NODE_BINARY_PATH') ?: '/usr/bin/node')
+                    ->setChromePath($chromePath)
+                    ->setNodeModulePath(self::getNodeModulesPath())
+                    ->showBackground(true)
+                    ->addChromiumArguments([
+                        '--disable-gpu',
+                        '--disable-dev-shm-usage',
+                        '--disable-setuid-sandbox',
+                        '--no-first-run',
+                        '--no-zygote',
+                        '--single-process',
+                        '--disable-background-timer-throttling',
+                        '--disable-backgrounding-occluded-windows',
+                        '--disable-renderer-backgrounding'
+                    ])
+                    ->timeout(60);
+            });
+        
+        if ($outputPath) {
+            $pdf->name($outputPath);
         }
-
-        // Then try to find the executable
+        
+        return $pdf;
+    }
+    
+    /**
+     * Create a PDF from a view
+     */
+    public static function fromView($view, array $data = [], $outputPath = null)
+    {
+        // Ensure Chrome is registered with Puppeteer
+        PuppeteerSetup::registerChrome();
+        
+        $pdf = Pdf::view($view, $data)
+            ->withBrowsershot(function ($browsershot) {
+                $chromePath = self::getChromePath();
+                Log::info("Using Chrome path: {$chromePath}");
+                
+                $browsershot->noSandbox()
+                    ->setNodeBinary(getenv('NODE_BINARY_PATH') ?: '/usr/bin/node')
+                    ->setChromePath($chromePath)
+                    ->setNodeModulePath(self::getNodeModulesPath())
+                    ->showBackground(true)
+                    ->addChromiumArguments([
+                        '--disable-gpu',
+                        '--disable-dev-shm-usage',
+                        '--disable-setuid-sandbox',
+                        '--no-first-run',
+                        '--no-zygote',
+                        '--single-process',
+                        '--disable-background-timer-throttling',
+                        '--disable-backgrounding-occluded-windows',
+                        '--disable-renderer-backgrounding'
+                    ])
+                    ->timeout(60);
+            });
+        
+        if ($outputPath) {
+            $pdf->name($outputPath);
+        }
+        
+        return $pdf;
+    }
+    
+    /**
+     * Get the Chrome executable path
+     */
+    public static function getChromePath()
+    {
+        $chromePath = getenv('PUPPETEER_EXECUTABLE_PATH');
+        
+        if (!$chromePath || !file_exists($chromePath)) {
+            $possiblePaths = [
+                '/usr/bin/google-chrome',
+                '/usr/bin/google-chrome-stable',
+                '/usr/bin/chromium',
+                '/usr/bin/chromium-browser',
+                '/usr/bin/chrome',
+                '/usr/local/bin/chromium',
+                '/usr/local/bin/chrome',
+                '/usr/local/bin/google-chrome'
+            ];
+            
+            foreach ($possiblePaths as $path) {
+                if (file_exists($path)) {
+                    $chromePath = $path;
+                    break;
+                }
+            }
+            
+            if (!$chromePath) {
+                $chromePath = '/usr/bin/google-chrome';
+            }
+            
+            Log::info("Using detected Chrome path: {$chromePath}");
+        }
+        
+        return $chromePath;
+    }
+    
+    /**
+     * Get the Node modules path
+     */
+    public static function getNodeModulesPath()
+    {
+        $nodePath = getenv('NODE_PATH');
+        if (!empty($nodePath)) {
+            $paths = explode(':', $nodePath);
+            foreach ($paths as $path) {
+                if (is_dir($path)) {
+                    return $path;
+                }
+            }
+        }
+        
+        // Try common paths
+        $possiblePaths = [
+            '/usr/local/lib/node_modules',
+            '/node_modules',
+            '/var/www/html/node_modules'
+        ];
+        
         foreach ($possiblePaths as $path) {
-            if (file_exists($path)) {
-                Log::info('Found Chrome executable at: ' . $path);
+            if (is_dir($path)) {
                 return $path;
             }
         }
-
-        // Default fallback
-        Log::warning('Could not find Chrome executable, using default path');
-        return '/usr/bin/chromium';
-    }
-
-    /**
-     * Generate a PDF from HTML content with sandbox disabled for Docker environments
-     *
-     * @param string $html The HTML content
-     * @param string|null $filename Optional filename for the PDF
-     * @return PdfBuilder
-     */
-    public static function fromHtml(string $html, ?string $filename = null): PdfBuilder
-    {
-        $pdf = Pdf::html($html);
-
-        // Use a default filename if none provided
-        $filename = $filename ?? 'document.pdf';
         
-        $chromePath = self::getChromePath();
-        
-        Log::info('PDF generation using Chrome at: ' . $chromePath);
-
-        return $pdf->withBrowsershot(function ($browsershot) use ($chromePath) {
-            $browsershot->noSandbox()
-                ->setNodeBinary(env('NODE_BINARY_PATH', '/usr/bin/node'))
-                ->setChromePath($chromePath)
-                ->addChromiumArguments([
-                    'no-sandbox',
-                    'disable-setuid-sandbox',
-                    'disable-dev-shm-usage'
-                ])
-                ->setDebuggingPort(9222);
-        })->format(config('pdf.default_paper_size'))
-          ->name($filename);
-    }
-
-    /**
-     * Generate a PDF from a view with sandbox disabled for Docker environments
-     *
-     * @param string $view The view name
-     * @param array $data The data to pass to the view
-     * @param string|null $filename Optional filename for the PDF
-     * @return PdfBuilder
-     */
-    public static function fromView(string $view, array $data = [], ?string $filename = null): PdfBuilder
-    {
-        $pdf = Pdf::view($view, $data);
-
-        // Use a default filename if none provided
-        $filename = $filename ?? 'document.pdf';
-        
-        $chromePath = self::getChromePath();
-        
-        Log::info('PDF generation using Chrome at: ' . $chromePath);
-
-        return $pdf->withBrowsershot(function ($browsershot) use ($chromePath) {
-            $browsershot->noSandbox()
-                ->setNodeBinary(env('NODE_BINARY_PATH', '/usr/bin/node'))
-                ->setChromePath($chromePath)
-                ->addChromiumArguments([
-                    'no-sandbox',
-                    'disable-setuid-sandbox',
-                    'disable-dev-shm-usage'
-                ]);
-        })->format(config('pdf.default_paper_size'))
-          ->name($filename);
+        return '/usr/local/lib/node_modules'; // Default fallback
     }
 }
