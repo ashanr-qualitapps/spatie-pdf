@@ -261,6 +261,23 @@ class PdfController extends Controller
                 // Garantía y tipo
                 'warranty'      => PdfAsset::base64('icons/icon-garantia.png'),
                 'vehicle_type'  => PdfAsset::base64('icons/icon-tipo.png'),
+                
+                // Performance
+                'emissions'     => PdfAsset::base64('icons/icon-emisiones.png'),
+                'consumption'   => PdfAsset::base64('icons/icon-consumo.png'),
+                'max_speed'     => PdfAsset::base64('icons/icon-velocidad.png'),
+                'engine'        => PdfAsset::base64('icons/icon-motor.png'),
+                
+                // Dimensions
+                'height'        => PdfAsset::base64('icons/icon-altura.png'),
+                'width'         => PdfAsset::base64('icons/icon-anchura.png'),
+                'length'        => PdfAsset::base64('icons/icon-longitud.png'),
+                'weight'        => PdfAsset::base64('icons/icon-peso.png'),
+                
+                // Price and financing
+                'price'         => PdfAsset::base64('icons/icon-precio.png'),
+                'finance'       => PdfAsset::base64('icons/icon-financiacion.png'),
+                'discount'      => PdfAsset::base64('icons/icon-descuento.png'),
             ];
 
           // Base64 encode for embedding

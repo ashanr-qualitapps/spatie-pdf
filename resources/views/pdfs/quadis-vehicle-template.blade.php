@@ -5,10 +5,7 @@
     size:A4 portrait;
     margin: 20mm 15mm 20mm 15mm;   /* T / R / B / L */
     /* Footer Full Width Styles */
-
-
- }   /* pdf has its own margins inside .page */
-
+}
 
     .footer-wrapper,
     .legal-section,
@@ -21,15 +18,15 @@
         box-sizing: border-box;
     }
 
- /* first sheet */
+/* first sheet - removed top margin */
 @page:first{
-    margin: 30mm 0 20mm 0;           /* 30 mm header, 0 side margins */
+    margin: 0 0 20mm 0;           /* No top margin, 0 side margins */
     @top-center{
         content: element(firstHeader);    /* place the running header here */
     }
 }
 
- body{margin:0;padding:0}
+body{margin:0;padding:0}
 
 
 .page{
@@ -96,6 +93,7 @@
 /* Generic white rounded boxes ---------------------------------------- */
 
 .characteristics-section,
+.description-content,
 .description-section,
 .technical-details{
     border:2px solid #FFD36D;
@@ -122,25 +120,37 @@
 
 /* goes in the <head> of the template, before any page is laid out */
 .first-page-header{
-    position: running(firstHeader);   /* lift into page margin           */
-    height: 30mm;                     /* ≈10 % of A4 height              */
-    width: 100%;
-
+    position: running(firstHeader);   /* lift into page margin */
+    height: 30mm;                     /* ≈10 % of A4 height */
+    width: 100vw;                     /* Full viewport width */
+    box-sizing: border-box;           /* Include padding in width */
+    
     /* ABSOLUTELY NO OUTER SPACE */
-    margin: 0;                        /* ← kill margins                  */
-    padding: 0;                       /* ← kill padding on all sides     */
-
+    margin: 0;
+    padding: 0;                      
+    
     background:#000;
     color:#fff;
     display:flex;
     align-items:center;
     justify-content:space-between;
-
+    
     -webkit-print-color-adjust:exact;
-            print-color-adjust:exact;
+    print-color-adjust:exact;
 }
 
+/* Add padding to the header content instead of the container */
+.first-page-header > * {
+    padding: 0 15mm; /* Match the side margins of the page */
+}
 
+/* Adjust first page content to account for header */
+.first-page {
+    padding-top: 10px; /* Small padding after header */
+}
+
+    .tech-section{font-family:Arial, sans-serif;margin:20px 0;page-break-inside:avoid;}
+    .tech-title  {font-size:20px;font-weight:700;text-align:center;margin-bottom:12px;}
 </style>
 @endsection
 
@@ -181,12 +191,11 @@
     @include('pdfs.sections.vehicle-technical-details', ['vehicle' => $vehicle])
 
     @if(!empty($vehicle['description2']))
-        <div class="characteristics-section">
-            <h2 class="section-title">Otros datos relevantes</h2>
-            <div class="description-content">
+      
+            <h2 class="tech-title">Otros datos relevantes</h2>
+            <div class="description-section">
                 {!! nl2br(e($vehicle['description2'])) !!}
             </div>
-        </div>
     @endif
 
     @if(!empty($vehicle['description']))
@@ -206,8 +215,6 @@
 <div class="page third-page">
 
     @include('pdfs.sections.vehicle-images-gallary', ['vehicle' => $vehicle])
-
-    @include('pdfs.sections.vehicle-financial-info', ['vehicle' => $vehicle])
 
 </div>
 

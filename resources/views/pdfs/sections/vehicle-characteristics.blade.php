@@ -42,7 +42,7 @@
         <div class="ch-grid">
             {{-- Matriculación --}}
             <div class="ch-item">
-                <img src="{{ $icons['fuel'] }}" alt="">
+                <img src="{{ $icons['matriculation'] }}" alt="">
                 <div>
                     <span class="ch-label">Matriculación</span>
                     <span class="ch-value">{{ $vehicle['year'] ?? 'N/A' }}</span>
@@ -51,7 +51,7 @@
 
             {{-- Kilómetros --}}
             <div class="ch-item">
-                <img src="{{ $icons['fuel'] }}" alt="">
+                <img src="{{ $icons['kilometers'] }}" alt="">
                 <div>
                     <span class="ch-label">Kilómetros</span>
                     <span class="ch-value">
@@ -77,7 +77,7 @@
 
             {{-- Distintivo --}}
             <div class="ch-item">
-                <img src="{{ $icons['fuel'] }}" alt="">
+                <img src="{{ $icons['env_label'] }}" alt="">
                 <div>
                     <span class="ch-label">Distintivo</span>
                     <span class="ch-value">
@@ -90,7 +90,7 @@
 
             {{-- Cambio --}}
             <div class="ch-item">
-                <img src="{{ $icons['fuel'] }}" alt="">
+                <img src="{{ $icons['gearbox'] }}" alt="">
                 <div>
                     <span class="ch-label">Cambio</span>
                     <span class="ch-value">{{ $vehicle['transmission'] ?? 'N/A' }}</span>
@@ -99,7 +99,7 @@
 
             {{-- Tracción --}}
             <div class="ch-item">
-                <img src="{{ $icons['fuel']}}" alt="">
+                <img src="{{ $icons['drive_train']}}" alt="">
                 <div>
                     <span class="ch-label">Tracción</span>
                     <span class="ch-value">{{ $vehicle['driveTrain'] ?? 'N/A' }}</span>
@@ -108,7 +108,7 @@
 
             {{-- Potencia --}}
             <div class="ch-item">
-                <img src="{{ $icons['fuel'] }}" alt="">
+                <img src="{{ $icons['power'] }}" alt="">
                 <div>
                     <span class="ch-label">Potencia</span>
                     <span class="ch-value">
@@ -119,7 +119,7 @@
 
             {{-- Puertas --}}
             <div class="ch-item">
-                <img src="{{ $icons['fuel'] }}" alt="">
+                <img src="{{ $icons['doors'] }}" alt="">
                 <div>
                     <span class="ch-label">Puertas</span>
                     <span class="ch-value">{{ $vehicle['doors'] ?? 'N/A' }}</span>
@@ -128,7 +128,7 @@
 
             {{-- Plazas --}}
             <div class="ch-item">
-                <img src="{{ $icons['fuel'] }}" alt="">
+                <img src="{{ $icons['seats'] }}" alt="">
                 <div>
                     <span class="ch-label">Plazas</span>
                     <span class="ch-value">{{ $vehicle['seats'] ?? 'N/A' }}</span>
@@ -137,7 +137,7 @@
 
             {{-- Color --}}
             <div class="ch-item">
-                <img src="{{ $icons['fuel']}}" alt="">
+                <img src="{{ $icons['color']}}" alt="">
                 <div>
                     <span class="ch-label">Color</span>
                     <span class="ch-value">{{ $vehicle['color'] ?? 'N/A' }}</span>
@@ -146,7 +146,7 @@
 
             {{-- Garantía --}}
             <div class="ch-item">
-                <img src="{{ $icons['fuel'] }}" alt="">
+                <img src="{{ $icons['warranty'] }}" alt="">
                 <div>
                     <span class="ch-label">Garantía</span>
                     <span class="ch-value">
@@ -158,7 +158,7 @@
 
             {{-- Carrocería --}}
             <div class="ch-item">
-                <img src="{{ $icons['fuel'] }}" alt="">
+                <img src="{{ $icons['body'] }}" alt="">
                 <div>
                     <span class="ch-label">Carrocería</span>
                     <span class="ch-value">{{ $vehicle['category']['name'] ?? 'N/A' }}</span>
@@ -168,7 +168,7 @@
             {{-- Tipo (si existe) --}}
             @if(!empty($vehicle['type']['name']))
                 <div class="ch-item">
-                    <img src="{{ $icons['fuel'] }}" alt="">
+                    <img src="{{ $icons['vehicle_type'] }}" alt="">
                     <div>
                         <span class="ch-label">Tipo</span>
                         <span class="ch-value">{{ $vehicle['type']['name'] }}</span>
